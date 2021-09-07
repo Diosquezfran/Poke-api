@@ -1,0 +1,39 @@
+
+.homeContent{
+    padding-top: 25rem;
+    padding-left: 2rem;
+    margin-left: 2rem;
+}
+
+.imagen {
+    background-image: url('../../assets/bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 110vh;
+    width: 100vw;
+}
+
+
+
+.title{
+    font-size: 3rem;
+    color: var(--red);
+}
+
+.homeButton{
+    padding: 1rem 1.5rem;
+    border-left: solid var(--red) 5px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--yellow);
+    box-shadow: -7px -7px 10px transparent;
+
+}
+
+.homeButton:hover {
+    background-color: var(--red);
+    transition: 0.25s ease-in;
+    box-shadow: -5px -5px 10px var(--blue);
+}

@@ -1,0 +1,32 @@
+
+.header {
+    background-color: var(--bg-color);
+    width: 100vw;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.headerSelect {
+    outline: none;
+    cursor: pointer;
+    background-color: transparent;
+    border-style: none;
+    border-bottom: solid 2px var(--blue);
+    padding: 0.5rem;
+    font-family: var(--letter);
+    text-transform: uppercase;
+    font-weight:normal;
+    width: auto;
+    height: 2.3rem;
+    border-radius: 5px;
+}
+
+.headerSelect:hover {
+    background-color: var(--bg-color-hover);
+    transition: 0.25s;
+}
+.headerOption{
+    /* text-transform: uppercase; */
+}

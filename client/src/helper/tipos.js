@@ -1,0 +1,22 @@
+export const tipos = [
+    'ground',
+    // 'fighting',
+    'bug',
+    // 'steel',
+    'grass',
+    // 'ice',
+    // 'dark',
+    // 'shadow',
+    'poison',
+    'flying',
+    'fire',
+    // 'ghost',
+    'electric',
+    // 'psychic',
+    'fairy',
+    // 'unknown',
+    'normal',
+    // 'rock',
+    'water',
+    // 'dragon'
+]

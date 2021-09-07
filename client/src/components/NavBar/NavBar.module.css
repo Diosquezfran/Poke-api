@@ -1,0 +1,18 @@
+.NavBar{
+    width: 100vw;
+    margin: 0%;
+    background: #0f0c29; 
+    background: -webkit-linear-gradient(to right, #24243e, #302b63, #0f0c29); 
+    background: linear-gradient(to right, #24243e, #302b63, #0f0c29); 
+
+}
+
+.navContainer{
+    display: flex;
+    justify-content: center;
+} 
+
+.navImage {
+    width: 30rem;
+    height: 10rem;
+}
