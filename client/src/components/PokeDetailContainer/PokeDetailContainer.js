@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getDetail } from '../../redux/Actions';
 import { useDispatch, useSelector } from 'react-redux';
 import PokeDetail from './PokeDetail';
+import styles from './PokeDetailContainer.module.css';
 
 function PokeDetailContainer() {
     const dispatch = useDispatch();
@@ -14,10 +15,11 @@ function PokeDetailContainer() {
     },[id]);
 
     return (
-        <div>
-            soy el detalle de pokemon
-            {pokeDetail !== null ? <PokeDetail pokemon={pokeDetail}  /> 
-            : <p>cargando...</p>}
+        <div className={styles.detailContainer}>
+                {pokeDetail !== null ? <PokeDetail pokemon={pokeDetail}  /> 
+                : <p>cargando...</p>}
+            <Link to='/PokeList' className={styles.button}>volver</Link>
+
         </div>
     )
 };

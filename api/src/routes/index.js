@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const axios = require("axios");
-const { Pokemon, Tipo } = require("../db");
+const { Pokemon, Type } = require("../db");
 
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
@@ -18,12 +18,12 @@ router.get("/pokemons", async (req, res) => {
   const getPokeApi = async () => {
     let total = [];
     const apiUrl = await axios.get("https://pokeapi.co/api/v2/pokemon");
-    const apiData = await apiUrl.data; 
+    const apiData = await apiUrl.data;
 
-    const apiUrl2 = await axios.get(apiData.next)
+    const apiUrl2 = await axios.get(apiData.next);
     const apiData2 = await apiUrl2.data;
-    
-    const totalPokemons = [...apiData.results, ...apiUrl2.data.results] ;
+
+    const totalPokemons = [...apiData.results, ...apiUrl2.data.results];
 
     for (let i = 0; i < totalPokemons.length; i++) {
       let pokeDetail = await axios.get(totalPokemons[i].url);
@@ -33,7 +33,8 @@ router.get("/pokemons", async (req, res) => {
         attack: detailData.stats[1].base_stat,
         name: detailData.name,
         image: detailData.sprites.other.dream_world.front_default,
-        types: detailData.types.map((el) => el.type.name),
+        types: detailData.types.map((el) => ({ name: el.type.name })),
+        dbOrigin: false
       });
     }
 
@@ -42,18 +43,20 @@ router.get("/pokemons", async (req, res) => {
 
   const getPokeDB = async () => {
     return await Pokemon.findAll({
-      include: {
-        model: Tipo,
-        attributes: ["name"],
-        through: [],
-      },
+      include: [
+        {
+          model: Type,
+          attributes: ["name"],
+          through: { attributes: [] },
+        },
+      ],
     });
   };
 
   const getAll = async () => {
     const apiData = await getPokeApi();
     const DbData = await getPokeDB();
-    //mandar solo el array
+    // mandar solo el array
     const totalData = apiData.concat(DbData);
     return totalData;
   };
@@ -65,21 +68,38 @@ router.get("/pokemons", async (req, res) => {
       p.name.toLowerCase().includes(name.toLowerCase())
     );
     pokeName.length
-      ? res.status(200).send(pokeName)
-      : res.status(404).send("not found");
+      ? res.status(200).send(pokeName.map((p) => ({
+        id: p.id,
+        name: p.name,
+        image: p.image,
+        types: p.types.map((type) => type.name),
+        dbOrigin: p.dbOrigin
+      })))
+      : res.status(404).send("not found!");
   } else {
-    res.status(200).send(totalPokemons);
+    res.status(200).send(
+      totalPokemons.map((p) => ({
+        id: p.id,
+        attack: p.attack,
+        name: p.name,
+        image: p.image,
+        types: p.types.map((type) => type.name),
+        dbOrigin: p.dbOrigin
+      }))
+    );
   }
 });
 
 /*----------------------------  GET BY ID   -------------------------------------- */
 
 router.get("/pokemons/:idPokemon", async (req, res) => {
-  const {idPokemon} = req.params;
+  const { idPokemon } = req.params;
 
-  if(idPokemon.length < 3){
+  if (idPokemon.length < 3) {
     try {
-      const apiUrl = await axios.get(`https://pokeapi.co/api/v2/pokemon/${idPokemon}`);
+      const apiUrl = await axios.get(
+        `https://pokeapi.co/api/v2/pokemon/${idPokemon}`
+      );
       const apiData = await apiUrl.data;
       const pokemon = {
         id: apiData.id,
@@ -91,28 +111,37 @@ router.get("/pokemons/:idPokemon", async (req, res) => {
         height: apiData.height,
         weight: apiData.weight,
         image: apiData.sprites.other.dream_world.front_default,
-        types: apiData.types.map((el) => el.type.name), 
-      } 
-      res.status(200).send(pokemon)
+        types: apiData.types.map((el) => el.type.name),
+      };
+      res.status(200).send(pokemon);
     } catch (error) {
-      res.status(404).send('Not found')      
+      res.status(404).send("Not found");
     }
   } else {
     try {
       const pokeDetail = await Pokemon.findByPk(idPokemon);
-      res.status(200).send(pokeDetail)
+      res.status(200).send(pokeDetail);
     } catch (error) {
-      res.status(404).send('not found')
+      res.status(404).send("not found");
     }
   }
-
 });
 
 /* -------------------- CREATE -------------------- */
 
 router.post("/pokemons", async (req, res) => {
-  const { name, life, attack, defense, speed, height, weight, dbOrigin, type } =
-    req.body;
+  const {
+    name,
+    life,
+    attack,
+    defense,
+    speed,
+    height,
+    weight,
+    dbOrigin,
+    type,
+    image,
+  } = req.body;
 
   let pokeCreated = await Pokemon.create({
     name,
@@ -122,33 +151,31 @@ router.post("/pokemons", async (req, res) => {
     speed,
     height,
     weight,
-    // image
+    image,
   });
 
-  let tpyeDb = await Tipo.findAll({
+  let tpyeDb = await Type.findAll({
     where: {
       name: type,
     },
   });
 
-  pokeCreated.addTipo(tpyeDb);
+  pokeCreated.addTypes(tpyeDb);
   res.send("Creado exitosamente");
 });
 
 /* -------------------- GET TYPES -------------------- */
 
-
 router.get("/types", async (req, res) => {
   const types = await axios.get("https://pokeapi.co/api/v2/type");
   const typesData = await types.data;
   typesData.results.forEach((el) => {
-    Tipo.findOrCreate({
+    Type.findOrCreate({
       where: { name: el.name },
     });
   });
-  const allTypes = await Tipo.findAll();
+  const allTypes = await Type.findAll();
   res.send(allTypes);
 });
-
 
 module.exports = router;

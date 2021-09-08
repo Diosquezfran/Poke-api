@@ -4,12 +4,11 @@
     border-radius: 4px;
     border-style: none;
     outline: none;
-    /* border-bottom: solid 2px var(--red); */
 }
 
 .searchBar:hover {
-    border-bottom: solid 2px var(--red);
-    transition: 0.25s;
+    border-bottom: solid 2.5px var(--red);
+    transition: 0.15s;
 }
 
 .searchButton{

@@ -1,4 +1,5 @@
 import React from 'react';
+import styes from './Paginado.module.css';
 
 function Paginado({ pokemonsPerPage, pokemons, paginado }) {
     const pageNumber = [];
@@ -8,11 +9,11 @@ function Paginado({ pokemonsPerPage, pokemons, paginado }) {
     };
     
     return (
-        <ul>
-           {pageNumber.length  && 
+        <ul className={styes.paginadoContainer}>
+           {pageNumber.length > 0 ? 
            pageNumber.map(numberPage =>
             <li style={{cursor: 'pointer'}} key={numberPage} onClick={() => paginado(numberPage)} >{numberPage}</li> 
-           )} 
+           ) : null} 
         </ul>
     )
 };

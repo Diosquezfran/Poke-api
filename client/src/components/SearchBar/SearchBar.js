@@ -24,7 +24,7 @@ function SearchBar() {
             placeholder="find a pokemon"
             onChange={(e) => handleChange(e)}
             />
-            <button className={styles.searchButton} onClick={handleSubmit}>Buscar</button>
+            <button className={styles.searchButton} onClick={()=>handleSubmit()}>Buscar</button>
         </div>
     )
 }

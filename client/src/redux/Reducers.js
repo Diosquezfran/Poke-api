@@ -25,11 +25,9 @@ const Reducer = (state = initialState, action) => {
         allPokemons: action.payload,
         pokemons: action.payload,
       };
-
+      
     case GET_BY_TYPE:
-      console.log('reducer', action.payload);
       const allPoke = state.allPokemons;
-      console.log(allPoke);
       const pokeTypes =
         action.payload === "all"
           ? allPoke
@@ -41,6 +39,10 @@ const Reducer = (state = initialState, action) => {
         pokemons: pokeTypes,
       };
     
+
+
+
+      
     case GET_BY_NAME:
       return {
         ...state,
@@ -101,6 +103,7 @@ const Reducer = (state = initialState, action) => {
         ...state,
         pokemons: orderArr,
       };
+
     case ORDER_BY_STRENGTH:
         let orderStrength = action.payload === 'asc' ?
         state.pokemons.sort((a, b) => {
@@ -108,7 +111,6 @@ const Reducer = (state = initialState, action) => {
         }) : state.pokemons.sort((a, b) => {
             return b.attack - a.attack
         }) ;
-        //esto debería funcionar, solo que los pokem no tienen la propiedad attack(mandar desde el back eso)
         return {
             ...state,
             pokemons: orderStrength

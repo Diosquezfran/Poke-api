@@ -24,7 +24,7 @@ function PokeListContainer() {
   const paginado = (pagNum) => {
     setCurrentPage(pagNum);
   };  
-
+  console.log(pokemons);
   useEffect(() => {
     dispatch(getPokemons());
   }, [dispatch]);
@@ -50,11 +50,8 @@ function PokeListContainer() {
   };
 
   return (
-    <div>
+    <div className={styles.listContainer}>
       <NavBar />
-
-
-      
       <div className={styles.header}>
         <select className={styles.headerSelect} onChange={e => handleFilterType(e)}>
           <option value="all">all</option>
@@ -81,20 +78,16 @@ function PokeListContainer() {
         {/* <input type="text" placeholder="Find a pokemon" /> */}
         <SearchBar />
       </div>
-
-
-
-
       <Paginado
-        pokemonsPerPage={pokemonsPerPage}
-        pokemons={pokemons.length}
-        paginado={paginado}
-      />
-      <>
-        {currentPokemons.length > 0 ?
-          currentPokemons.map((p) => <PokeCard key={p.name} pokemon={p} />)
+          pokemonsPerPage={pokemonsPerPage}
+          pokemons={pokemons.length}
+          paginado={paginado}
+        />
+      <div className={styles.cardContainer}>
+        {currentPokemons.length ?
+          currentPokemons.map((p) => <PokeCard key={p.id} pokemon={p} />)
         : <p>cargando...</p>}
-      </>
+      </div>
     </div>
   );
 }
